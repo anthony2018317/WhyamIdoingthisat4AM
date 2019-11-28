@@ -1,6 +1,7 @@
 build
 build_refsol
 submission
+data
 
 # Ignore subprojects imported by meson wrap
 subprojects/packagecache
