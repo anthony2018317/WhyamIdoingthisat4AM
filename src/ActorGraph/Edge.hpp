@@ -101,6 +101,7 @@ class Node {
     vector<Edge*> edges;  // List of edges connected to this node
     Edge* prev;           // Path from some node to this node
     string name;          // Name of actor
+    bool done = false;    // True if checked
 
   public:
     /**
@@ -128,6 +129,12 @@ class Node {
      * Returns: void
      */
     void addEdge(Edge* newEdge);
+
+    void check();
+
+    void uncheck();
+
+    bool isDone();
 
     /**
      * Sets the path from some other node to this node

@@ -45,6 +45,9 @@ vector<Edge*> findUnweightedPath(ActorGraph& graph, string actor1,
                                  string actor2) {
     Node* start = graph.getActorNode(actor1);
     Node* end = graph.getActorNode(actor2);
+    if (!start || !end) {
+        return {};
+    }
     // cout << (start == nullptr);
     // cout << (end == nullptr);
     queue<Node*> bfs;
@@ -57,7 +60,8 @@ vector<Edge*> findUnweightedPath(ActorGraph& graph, string actor1,
         // Runs BFS to find nearest path using a queue
         Node* current = bfs.front();
         bfs.pop();
-        // cout << "popped: " << current->getName() << endl;
+        current->check();
+        cout << "popped: " << current->getName() << endl;
         if (current == end) {
             clearEdges(
                 checked);  // clears all edges so they are reset to unchecked
@@ -86,6 +90,9 @@ vector<Edge*> findUnweightedPath(ActorGraph& graph, string actor1,
                 // Edge will result in a cycle back to a checked node
                 continue;
             }
+            if (neighbor->isDone()) {
+                continue;
+            }
             bfs.push(neighbor);  // updates neighbor's path
             neighbor->setPrev(neighborEdges[edge]);
         }
@@ -104,6 +111,7 @@ vector<Edge*> findUnweightedPath(ActorGraph& graph, string actor1,
 void clearEdges(vector<Edge*> edges) {
     for (int edge = 0; edge < edges.size(); edge++) {
         edges[edge]->unCheck();
+        edges[edge]->getSource()->uncheck();
     }
 }
 

@@ -41,6 +41,12 @@ void Node::addEdge(Node* other, Movie movie) {
     edges.push_back(edge);
 }
 
+void Node::check() { done = true; }
+
+void Node::uncheck() { done = false; }
+
+bool Node::isDone() { return done; }
+
 /**
  * Adds an edge between this actor and another actor, given an existing
  * pointer to an edge
