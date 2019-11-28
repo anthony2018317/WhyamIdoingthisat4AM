@@ -1,7 +1,7 @@
 subdir('ActorGraph')
 
 
-link_predictor_exe = executable('link_predictor.cpp.executable', 
+link_predictor_exe = executable('linkpredictor.cpp.executable', 
     sources: ['linkpredictor.cpp'],
     dependencies : [actor_graph_dep],
     install : true)
