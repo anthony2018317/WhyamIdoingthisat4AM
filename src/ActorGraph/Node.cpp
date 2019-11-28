@@ -26,7 +26,7 @@ using namespace std;
  * Params:
  *  - actor_name: the name of the actor
  */
-Node::Node(string actor_name) { actor_name = name; }
+Node::Node(string actor_name) { name = actor_name; }
 
 /**
  * Adds an edge between this actor and another actor, given the movie name
