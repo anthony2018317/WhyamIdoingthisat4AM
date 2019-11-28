@@ -7,7 +7,11 @@
  * connects two actors together when part of same movie.
  */
 
-
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
 #include "ActorGraph.hpp"
 
 using namespace std;

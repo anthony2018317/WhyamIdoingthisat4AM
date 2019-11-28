@@ -15,10 +15,6 @@
 #include <vector>
 #include "ActorGraph.hpp"
 
-#include "Edge.hpp"
-// #include "Movie.hpp"
-// #include "Node.hpp"
-
 using namespace std;
 
 /**
@@ -36,7 +32,7 @@ Node::Node(string actor_name) { actor_name = name; }
  * - movie: the name of the movie that joins the two actors
  * Returns: void
  */
-void Node::addEdge(Node* other, Movie movie) {
+void Node::addEdge(Node* other, string movie) {
     Edge* edge = new Edge(this, other, movie);
     edges.push_back(edge);
 }
@@ -90,8 +86,7 @@ string Node::getName() { return name; }
  */
 Edge* Node::findEdge(string actor) {
     for (int edge = 0; edge < edges.size(); edge++) {
-        if (edges[edge]->getDest()->getName() ==
-            actor) {  // Actor found in edges list
+        if (edges[edge]->getName() == actor) {  // Actor found in edges list
             return edges[edge];
         }
     }
