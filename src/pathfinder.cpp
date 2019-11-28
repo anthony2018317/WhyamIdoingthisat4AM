@@ -15,10 +15,10 @@
 #include "ActorGraph.hpp"
 
 // argv positions
-#define MOVIE_FILE 0
-#define UW 1
-#define ACTOR_FILE 2
-#define OUTPUT_FILE 3
+#define MOVIE_FILE 1
+#define UW 2
+#define ACTOR_FILE 3
+#define OUTPUT_FILE 4
 
 // Delimiters in outputing paths
 #define ACT_MOV "--"
@@ -45,17 +45,30 @@ vector<Edge*> findUnweightedPath(ActorGraph& graph, string actor1,
                                  string actor2) {
     Node* start = graph.getActorNode(actor1);
     Node* end = graph.getActorNode(actor2);
+    // cout << (start == nullptr);
+    // cout << (end == nullptr);
     queue<Node*> bfs;
     bfs.push(start);
+    // cout << "actor1: " << start->getName() << endl;
+    // cout << "actor2: " << end->getName() << endl;
+
     vector<Edge*> checked;
     while (!bfs.empty()) {
         // Runs BFS to find nearest path using a queue
         Node* current = bfs.front();
         bfs.pop();
+        // cout << "popped: " << current->getName() << endl;
         if (current == end) {
             clearEdges(
                 checked);  // clears all edges so they are reset to unchecked
-            return current->getPath();
+            // cout << "reached end"
+            vector<Edge*> path;
+            while (current != start) {
+                path.insert(path.begin(), current->getPrev());
+                // cout << "current: " << current->getName() << endl;
+                current = current->getPrev()->getSource();
+            }
+            return path;
         }
         vector<Edge*> neighborEdges = current->getEdges();
         for (int edge = 0; edge < neighborEdges.size(); edge++) {
@@ -73,11 +86,8 @@ vector<Edge*> findUnweightedPath(ActorGraph& graph, string actor1,
                 // Edge will result in a cycle back to a checked node
                 continue;
             }
-            bfs.push(neighbor);
-            vector<Edge*> path = neighbor->getPath();  // updates neighbor's
-                                                       // path
-            path.push_back(neighborEdges[edge]);
-            neighbor->setPath(path);
+            bfs.push(neighbor);  // updates neighbor's path
+            neighbor->setPrev(neighborEdges[edge]);
         }
     }
     clearEdges(checked);
@@ -117,6 +127,8 @@ vector<pair<string, string>> parsePathFile(string testFile) {
             break;
         }
 
+        // cout << "Reading: " << line << endl;
+
         if (!have_header) {
             // skip the header
             have_header = true;
@@ -137,12 +149,19 @@ vector<pair<string, string>> parsePathFile(string testFile) {
             }
             if (pos == 1) {  // first actor
                 actors.first = str;
+                // cout << "Reading1: " << str << " ";
             } else {  // second actor
                 actors.second = str;
+                // cout << "Reading2: " << str << endl;
             }
             pos++;
         }
+        if (actors.first == "") {
+            continue;
+        }
         actorList.push_back(actors);
+        cout << "Reading1: " << actors.first << " ";
+        cout << "Reading2: " << actors.second << endl;
     }
     infile.close();
     return actorList;
@@ -160,13 +179,22 @@ int main(int argc, char* argv[]) {
     ActorGraph graph;
     graph.loadFromFile(argv[MOVIE_FILE], argv[UW]);
     vector<pair<string, string>> actors = parsePathFile(argv[ACTOR_FILE]);
+    cout << "made it past parsing" << endl;
     ofstream output;
     output.open(argv[OUTPUT_FILE]);
-    output << endl;
+    output << "(actor)--[movie#@year]]-->(actor)--..." << endl;
+    // cout << actors.size() << endl;
     for (int test = 0; test < actors.size(); test++) {
         // Runs pathfinder on all actor pairs in file
+        // cout << actors[test].first << " " << actors[test].second << endl;
+        // cout << "actors " << actors[test].first << " " << actors[test].second
+        //     << endl;
         vector<Edge*> path =
             findUnweightedPath(graph, actors[test].first, actors[test].second);
+        if (path.size() == 0) {
+            output << endl;
+            continue;
+        }
         for (int edge = 0; edge < path.size(); edge++) {
             if (edge == 0) {  // If printing first actor in path
                 output << LEFT_BRACE << path[edge]->getSource()->getName()

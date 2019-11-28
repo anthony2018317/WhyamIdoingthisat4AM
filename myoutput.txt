@@ -1,0 +1,4 @@
+(actor)--[movie#@year]]-->(actor)--...
+(Kevin Bacon)--[X-Men: First Class#@2011]-->(James McAvoy)--[Glass#@2019]-->(Samuel L. Jackson)--[Avengers: Endgame#@2019]-->(Robert Downey Jr.)
+(Kevin Bacon)--[X-Men: First Class#@2011]-->(James McAvoy)--[X-Men: Apocalypse#@2016]-->(Michael Fassbender)
+(Katherine Waterston)--[The Current War#@2017]-->(Tom Holland)

@@ -16,10 +16,10 @@
 #include "ActorGraph.hpp"
 
 // command line argument positions
-#define MOVIE_FILE 0
-#define ACTOR_FILE 1
-#define COLLAB_FILE 2
-#define UNCOLLAB_FILE 3
+#define MOVIE_FILE 1
+#define ACTOR_FILE 2
+#define COLLAB_FILE 3
+#define UNCOLLAB_FILE 4
 
 // Top rank 4 is printed
 #define TOP_RANK 4

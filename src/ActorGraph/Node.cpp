@@ -56,7 +56,7 @@ void Node::addEdge(Edge* newEdge) { edges.push_back(newEdge); }
  * - thePath: a vector containing nodes from some actor to this actor
  * Returns: void
  */
-void Node::setPath(vector<Edge*> thePath) { path = thePath; }
+void Node::setPrev(Edge* thePrev) { prev = thePrev; }
 
 /**
  * Returns the path from some actor to this actor
@@ -64,7 +64,7 @@ void Node::setPath(vector<Edge*> thePath) { path = thePath; }
  * Returns: a vector containing a list of nodes that are traversed to get to
  * this node
  */
-vector<Edge*> Node::getPath() { return path; }
+Edge* Node::getPrev() { return prev; }
 
 /**
  * Returns a vector of all other actors who starred in same movie as this actor

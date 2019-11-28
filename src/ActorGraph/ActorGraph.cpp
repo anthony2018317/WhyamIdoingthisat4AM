@@ -45,7 +45,7 @@ bool ActorGraph::loadFromFile(const char* in_filename,
 
         // get the next line
         if (!getline(infile, s)) break;
-        // cout << "READ: " << s << endl;
+        cout << "READ: " << s << endl;
 
         if (!have_header) {
             // skip the header
@@ -72,8 +72,11 @@ bool ActorGraph::loadFromFile(const char* in_filename,
 
         string actor(record[0]);
         string movie_title(record[1]);
+
         int year = stoi(record[2]);
         Movie movie = {movie_title, year};
+
+        cout << "year: " << year << endl;
 
         // Builds graph up
         if (movieList.find(movie) == movieList.end()) {
@@ -147,6 +150,7 @@ bool ActorGraph::loadFromFile(const char* in_filename,
  */
 Node* ActorGraph::getActorNode(string actorName) {
     if (actorList.find(actorName) == actorList.end()) {
+        cout << "Why here?" << actorName << endl;
         return nullptr;
     }
     return actorList.find(actorName)->second;

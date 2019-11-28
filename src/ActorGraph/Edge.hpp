@@ -99,7 +99,7 @@ class Edge {
 class Node {
   private:
     vector<Edge*> edges;  // List of edges connected to this node
-    vector<Edge*> path;   // Path from some node to this node
+    Edge* prev;           // Path from some node to this node
     string name;          // Name of actor
 
   public:
@@ -135,7 +135,7 @@ class Node {
      * - thePath: a vector containing nodes from some actor to this actor
      * Returns: void
      */
-    void setPath(vector<Edge*> thePath);
+    void setPrev(Edge* thePrev);
 
     /**
      * Returns the path from some actor to this actor
@@ -143,7 +143,7 @@ class Node {
      * Returns: a vector containing a list of nodes that are traversed to get to
      * this node
      */
-    vector<Edge*> getPath();
+    Edge* getPrev();
 
     /**
      * Returns the name of the actor contained by this node
