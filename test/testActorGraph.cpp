@@ -15,9 +15,9 @@ class SimpleActorGraph : public ::testing::Test {
   public:
     SimpleActorGraph() {
         // initialization code here
-        cout << "starting to load data" << endl;
+        // cout << "starting to load data" << endl;
         graph.loadFromFile("./../data/imdb_small_sample.tsv", false);
-        cout << "Finished loading file" << endl;
+        // cout << "Finished loading file" << endl;
     }
 };
 TEST_F(SimpleActorGraph, TEST_GET_ACTOR) {
@@ -25,17 +25,17 @@ TEST_F(SimpleActorGraph, TEST_GET_ACTOR) {
     ASSERT_EQ(actor->getName(), "Robert Downey Jr.");
     Node* actor2 = graph.getActorNode("Grant Jiang");
     ASSERT_EQ(actor2, nullptr);
-    Movie movie = {"Avengers: Endgame", 2015};
+    Movie movie = {"Avengers: Endgame", 2019};
     vector<Node*> actors = graph.getMovieCast(movie);
     bool firstFound = false;
     bool secondFound = false;
-    cout << "Prints case out" << endl;
+    // cout << "Start printing cast" << endl;
     for (int i = 0; i < actors.size(); i++) {
-        cout << actors[i]->getName() << endl;
+        // cout << actors[i]->getName() << endl;
         if (actors[i]->getName() == "Robert Downey Jr.") {
             firstFound = true;
         }
-        if (actors[i]->getName() == "Chris Evans") {
+        if (actors[i]->getName() == "Samuel L. Jackson") {
             secondFound = true;
         }
     }

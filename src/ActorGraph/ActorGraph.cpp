@@ -79,7 +79,7 @@ bool ActorGraph::loadFromFile(const char* in_filename,
         if (movieList.find(movie) == movieList.end()) {
             // if movie not in list
             vector<Node*> cast;
-            // cout << "Cannot find movie" << endl;
+            // cout << "Cannot find movie " << movie.name << endl;
             if (actorList.find(actor) == actorList.end()) {
                 // actor not in list
                 // cout << "Cannot find actor" << endl;
@@ -91,12 +91,12 @@ bool ActorGraph::loadFromFile(const char* in_filename,
                 // cout << "Found actor" << endl;
                 cast.push_back(actorList.find(actor)->second);
             }
-            movieList.insert({movie, cast});
+            movieList[movie] = cast;
         } else {
             // movie is in list
             vector<Node*> cast = movieList.find(movie)->second;
             Node* currActor;
-            // cout << "found movie" << endl;
+            // cout << "found movie " << movie.name << endl;
             if (actorList.find(actor) == actorList.end()) {
                 // actor not in list
                 currActor = new Node(actor);
@@ -107,14 +107,6 @@ bool ActorGraph::loadFromFile(const char* in_filename,
                 currActor = actorList.find(actor)->second;
                 // cout << "found actor" << endl;
             }
-
-            // cout << "Prints actorlist: " << endl;
-            // for (auto iter = actorList.begin(); iter != actorList.end();
-            //      iter++) {
-            //     cout << iter->first << " " << iter->second->getName() <<
-            //     "end"
-            //          << endl;
-            // }
 
             // cout << "Print actors:" << endl;
             for (int actor = 0; actor < cast.size(); actor++) {
@@ -127,10 +119,17 @@ bool ActorGraph::loadFromFile(const char* in_filename,
                 // Adds edge from other to curent
                 cast[actor]->addEdge(edgeToCurr);
             }
-            // cout << "end print" << endl;
+            // cout << "At end should push" << currActor->getName() << endl;
             cast.push_back(currActor);
+            movieList[movie] = cast;
+            // cout << cast[cast.size() - 1]->getName() << endl;
         }
     }
+
+    /*cout << "Prints actorlist: " << endl;
+    for (auto iter = actorList.begin(); iter != actorList.end(); iter++) {
+        cout << iter->first << " " << iter->second->getName() << "end" << endl;
+    }*/
     if (!infile.eof()) {
         cerr << "Failed to read " << in_filename << "!\n";
         return false;
@@ -162,7 +161,7 @@ Node* ActorGraph::getActorNode(string actorName) {
  */
 vector<Node*> ActorGraph::getMovieCast(Movie movie) {
     if (movieList.find(movie) == movieList.end()) {
-        cout << "Not in list" << endl;
+        // cout << "Not in list" << endl;
         return {};
     }
     return movieList.find(movie)->second;
