@@ -5,10 +5,6 @@ project('pa4_graph', 'cpp',
                      'cpp_std=c++14'])
 
 
-# === src dependencies ===
-# === end src dependencies ===
-subdir('src')
-
 
 # === test dependencies ===
 gtest_proj = subproject('gtest')
@@ -16,8 +12,18 @@ gtest_dep = gtest_proj.get_variable('gtest_main_dep')
 if not gtest_dep.found()
   error('MESON_SKIP_TEST: gtest not installed.')
 endif
+
+# === src dependencies ===
+# === end src dependencies ===
+subdir('src')
+
+
+
+
+
 # === end test dependencies ===
 subdir('test')
+
 
 
 # === custom commands ===

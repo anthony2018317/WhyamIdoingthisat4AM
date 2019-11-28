@@ -9,20 +9,18 @@
  * any/all aspects as you wish.
  */
 
-#include "ActorGraph.hpp"
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <string>
-#include <unordered_map>
-#include <vector>
+
+#include "ActorGraph.hpp"
 
 using namespace std;
 
 /**
  * Constructor of the Actor graph
  */
-ActorGraph::ActorGraph(void) {}
+ActorGraph::ActorGraph() {}
 
 /** You can modify this method definition as you wish
  *
@@ -74,9 +72,10 @@ bool ActorGraph::loadFromFile(const char* in_filename,
         string actor(record[0]);
         string movie_title(record[1]);
         int year = stoi(record[2]);
+        Movie movie = {movie_title, year};
 
         // Builds graph up
-        if (movieList.find(movie_title) == movieList.end()) {
+        if (movieList.find(movie) == movieList.end()) {
             // if movie not in list
             vector<Node*> cast;
             if (actorList.find(actor) == actorList.end()) {
@@ -88,10 +87,10 @@ bool ActorGraph::loadFromFile(const char* in_filename,
                 // actor is in list
                 cast.push_back(actorList.find(actor)->second);
             }
-            movieList.insert({movie_title, cast});
+            movieList.insert({movie, cast});
         } else {
             // movie is in list
-            vector<Node*> cast = movieList.find(movie_title)->second;
+            vector<Node*> cast = movieList.find(movie)->second;
             Node* currActor;
             if (actorList.find(actor) == actorList.end()) {
                 // actor not in list
@@ -104,12 +103,10 @@ bool ActorGraph::loadFromFile(const char* in_filename,
 
             for (int actor = 0; actor < cast.size(); actor++) {
                 // Adds each actor in the movie as an edge to current actor
-                Edge* edgeFromCurr =
-                    new Edge(currActor, cast[actor], movie_title);
+                Edge* edgeFromCurr = new Edge(currActor, cast[actor], movie);
                 // Adds edge from current to other
                 currActor->addEdge(edgeFromCurr);
-                Edge* edgeToCurr =
-                    new Edge(cast[actor], currActor, movie_title);
+                Edge* edgeToCurr = new Edge(cast[actor], currActor, movie);
                 // Adds edge from other to curent
                 cast[actor]->addEdge(edgeToCurr);
             }
@@ -145,9 +142,9 @@ Node* ActorGraph::getActorNode(string actorName) {
  * Returns: a vector containing all the actors in the movie, or empty vector
  * if movie does not exist
  */
-vector<Node*> ActorGraph::getMovieCast(string movieName) {
-    if (movieList.find(movieName) == movieList.end()) {
+vector<Node*> ActorGraph::getMovieCast(Movie movie) {
+    if (movieList.find(movie) == movieList.end()) {
         return {};
     }
-    return movieList.find(movieName)->second;
+    return movieList.find(movie)->second;
 }
