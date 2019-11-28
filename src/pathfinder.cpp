@@ -160,8 +160,8 @@ vector<pair<string, string>> parsePathFile(string testFile) {
             continue;
         }
         actorList.push_back(actors);
-        cout << "Reading1: " << actors.first << " ";
-        cout << "Reading2: " << actors.second << endl;
+        // cout << "Reading1: " << actors.first << " ";
+        // cout << "Reading2: " << actors.second << endl;
     }
     infile.close();
     return actorList;
@@ -179,7 +179,7 @@ int main(int argc, char* argv[]) {
     ActorGraph graph;
     graph.loadFromFile(argv[MOVIE_FILE], argv[UW]);
     vector<pair<string, string>> actors = parsePathFile(argv[ACTOR_FILE]);
-    cout << "made it past parsing" << endl;
+    // cout << "made it past parsing" << endl;
     ofstream output;
     output.open(argv[OUTPUT_FILE]);
     output << "(actor)--[movie#@year]]-->(actor)--..." << endl;
