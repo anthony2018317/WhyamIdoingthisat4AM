@@ -69,15 +69,18 @@ vector<string> predictCollaborate(ActorGraph& graph, string actorName) {
             if (neighborMap.find(neighbors[edge]->getDest()) ==
                 neighborMap.end()) {
                 // edge between collaborator and neighbor not in list
+                // cout << "make it 1" << endl;
                 neighborMap[neighbors[edge]->getDest()] = 1;
+
             } else {
+                // cout << "why adding" << endl;
                 neighborMap[neighbors[edge]->getDest()]++;
             }
         }
         int priority = 0;
         // Goes through neighbors to calculate priority
         for (auto iter2 = neighborMap.begin(); iter2 != neighborMap.end();
-             iter++) {
+             iter2++) {
             // numEdges from actor to collab * numEdges from collab to current
             priority += (collaborators[iter2->first] * iter2->second);
         }

@@ -130,10 +130,10 @@ vector<Edge*> findUnweightedPath(ActorGraph& graph, string actor1,
             if (neighbor->getName() == "Scott Glenn") {
                 cout << "here2" << endl;
             }*/
-            if (start->getName() == "Djimon Hounsou" &&
+            /*if (start->getName() == "Djimon Hounsou" &&
                 neighbor->getName() == "Suet Lam") {
                 cout << "wth, Islan" << endl;
-            }
+            }*/
             if (neighbor->getPrev() == nullptr) {
                 // only changes previous once
                 /*if (neighbor == end) {
@@ -161,10 +161,10 @@ vector<Edge*> findUnweightedPath(ActorGraph& graph, string actor1,
                             }
                         }
                     }*/
-                    if (start->getName() == "Djimon Hounsou" &&
+                    /*if (start->getName() == "Djimon Hounsou" &&
                         neighbor->getName() == "Suet Lam") {
                         cout << "null at " << neighbor->getName() << endl;
-                    }
+                    }*/
                     neighbor = neighbor->getPrev()->getSource();
                 }
                 // clears all Nodes when path found

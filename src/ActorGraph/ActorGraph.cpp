@@ -80,9 +80,9 @@ bool ActorGraph::loadFromFile(const char* in_filename,
         // cout << "year: " << year << endl;
 
         // Builds graph up
-        if (movie.name == "The Island" && (year == 2010 || year == 2005)) {
+        /*if (movie.name == "The Island" && (year == 2010 || year == 2005)) {
             cout << "pls stop" << endl;
-        }
+        }*/
         if (movieList.find(movie) == movieList.end()) {
             // if movie not in list
             vector<Node*> cast;
