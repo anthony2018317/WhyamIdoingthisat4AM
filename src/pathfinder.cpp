@@ -48,23 +48,44 @@ vector<Edge*> findUnweightedPath(ActorGraph& graph, string actor1,
     if (!start || !end) {
         return {};
     }
+    /*if (start->getName() == "Bruce Dern") {
+        cout << "begin" << endl;
+    }*/
     // cout << (start == nullptr);
     // cout << (end == nullptr);
     queue<Node*> bfs;
     bfs.push(start);
-    // cout << "actor1: " << start->getName() << endl;
-    // cout << "actor2: " << end->getName() << endl;
+    /*cout << endl;
+    cout << endl;
+    cout << endl;
+    cout << endl;
+    cout << endl;
+    cout << endl;
+    cout << "actor1: " << start->getName() << endl;
+    cout << "actor2: " << end->getName() << endl;*/
 
-    vector<Edge*> checked;
+    // vector<Edge*> checked;
+    unordered_map<Node*, int> finished;
+
     while (!bfs.empty()) {
         // Runs BFS to find nearest path using a queue
         Node* current = bfs.front();
+        // cout << "current: " << current->getName();
+        /*if (current->getPrev() != nullptr) {
+            cout << " :: " << current->getPrev()->getName().name << endl;
+        } else {
+            cout << " previous is null" << endl;
+        }*/
+
         bfs.pop();
+
+        // Marks node as done
         current->check();
+        finished[current] = 1;
         // cout << "popped: " << current->getName() << endl;
         if (current == end) {
-            clearEdges(
-                checked);  // clears all edges so they are reset to unchecked
+            // clearEdges(
+            //   checked);  // clears all edges so they are reset to unchecked
             // cout << "reached end"
             vector<Edge*> path;
             while (current != start) {
@@ -72,13 +93,21 @@ vector<Edge*> findUnweightedPath(ActorGraph& graph, string actor1,
                 // cout << "current: " << current->getName() << endl;
                 current = current->getPrev()->getSource();
             }
+            // clears all Nodes when path found
+            for (auto iter = finished.begin(); iter != finished.end(); iter++) {
+                iter->first->uncheck();
+            }
             return path;
         }
+
         vector<Edge*> neighborEdges = current->getEdges();
+
         for (int edge = 0; edge < neighborEdges.size(); edge++) {
             // Pushes neighbors onto queue
             Node* neighbor = neighborEdges[edge]->getDest();
-            if (neighbor == current) {
+            finished[neighbor] = 1;  // adds Node to changed list so it can be
+                                     // reset when path found
+            /*if (neighbor == current) {
                 // Skips directed edges pointed back to itself from neighbor
                 neighborEdges[edge]->check();
                 checked.push_back(
@@ -89,24 +118,73 @@ vector<Edge*> findUnweightedPath(ActorGraph& graph, string actor1,
             if (neighborEdges[edge]->isChecked()) {
                 // Edge will result in a cycle back to a checked node
                 continue;
-            }
+            }*/
             if (neighbor->isDone()) {
                 continue;
             }
-            neighbor->setPrev(neighborEdges[edge]);
+
+            /*if (neighbor->getName() == "Kevin Costner") {
+                cout << "here" << endl;
+            }
+
+            if (neighbor->getName() == "Scott Glenn") {
+                cout << "here2" << endl;
+            }*/
+            if (start->getName() == "Djimon Hounsou" &&
+                neighbor->getName() == "Suet Lam") {
+                cout << "wth, Islan" << endl;
+            }
+            if (neighbor->getPrev() == nullptr) {
+                // only changes previous once
+                /*if (neighbor == end) {
+                    cout << "if statement true" << endl;
+                }*/
+                neighbor->setPrev(neighborEdges[edge]);
+                /*if (neighbor == end) {
+                    cout << neighborEdges[edge]->getName().name << endl;
+                    cout << neighbor->getPrev()->getName().name << endl;
+                }*/
+            }
             if (neighbor == end) {
                 vector<Edge*> path;
                 while (neighbor != start) {
                     path.insert(path.begin(), neighbor->getPrev());
                     // cout << "current: " << current->getName() << endl;
+                    /*if (neighbor->getPrev() == nullptr) {
+                        cout << "Is null at: " << neighbor->getName() << endl;
+                        if (neighborEdges[edge] == nullptr) {
+                            cout << "Neighbor's edge is null" << endl;
+                        } else {
+                            cout << "Neighbor's edge is not null" << endl;
+                            if (neighbor->getPrev() == nullptr) {
+                                cout << "what the hell" << endl;
+                            }
+                        }
+                    }*/
+                    if (start->getName() == "Djimon Hounsou" &&
+                        neighbor->getName() == "Suet Lam") {
+                        cout << "null at " << neighbor->getName() << endl;
+                    }
                     neighbor = neighbor->getPrev()->getSource();
+                }
+                // clears all Nodes when path found
+                for (auto iter = finished.begin(); iter != finished.end();
+                     iter++) {
+                    iter->first->uncheck();
                 }
                 return path;
             }
             bfs.push(neighbor);  // updates neighbor's path
+            /*if (current->getName() == "Kevin Kline") {
+                cout << neighbor->getName() << " is enqueued" << endl;
+            }*/
         }
     }
-    clearEdges(checked);
+    // clearEdges(checked);
+    // clears all Nodes when path found
+    for (auto iter = finished.begin(); iter != finished.end(); iter++) {
+        iter->first->uncheck();
+    }
     return {};  // Path not found
 }
 

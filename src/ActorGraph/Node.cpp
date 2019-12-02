@@ -26,7 +26,10 @@ using namespace std;
  * Params:
  *  - actor_name: the name of the actor
  */
-Node::Node(string actor_name) { name = actor_name; }
+Node::Node(string actor_name) {
+    name = actor_name;
+    prev = nullptr;
+}
 
 /**
  * Adds an edge between this actor and another actor, given the movie name
@@ -43,7 +46,10 @@ void Node::addEdge(Node* other, Movie movie) {
 
 void Node::check() { done = true; }
 
-void Node::uncheck() { done = false; }
+void Node::uncheck() {
+    done = false;
+    prev = nullptr;
+}
 
 bool Node::isDone() { return done; }
 
@@ -62,7 +68,13 @@ void Node::addEdge(Edge* newEdge) { edges.push_back(newEdge); }
  * - thePath: a vector containing nodes from some actor to this actor
  * Returns: void
  */
-void Node::setPrev(Edge* thePrev) { prev = thePrev; }
+void Node::setPrev(Edge* thePrev) {
+    if (thePrev == nullptr) {
+        // cout << "being set to nullptr: " << name << endl;
+        return;
+    }
+    prev = thePrev;
+}
 
 /**
  * Returns the path from some actor to this actor

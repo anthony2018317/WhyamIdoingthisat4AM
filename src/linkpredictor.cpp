@@ -61,8 +61,9 @@ vector<string> predictCollaborate(ActorGraph& graph, string actorName) {
         // edges between each neighbor and current actor
         for (int edge = 0; edge < neighbors.size(); edge++) {
             if (collaborators.find(neighbors[edge]->getDest()) ==
-                collaborators.end()) {
-                // neighbor not a collaborator
+                    collaborators.end() ||
+                neighbors[edge]->getDest() == iter->first) {
+                // neighbor not a collaborator or itself
                 continue;
             }
             if (neighborMap.find(neighbors[edge]->getDest()) ==
@@ -75,7 +76,8 @@ vector<string> predictCollaborate(ActorGraph& graph, string actorName) {
         }
         int priority = 0;
         // Goes through neighbors to calculate priority
-        for (auto iter2 = neighborMap.begin(); iter2 != neighborMap.end();) {
+        for (auto iter2 = neighborMap.begin(); iter2 != neighborMap.end();
+             iter++) {
             // numEdges from actor to collab * numEdges from collab to current
             priority += (collaborators[iter2->first] * iter2->second);
         }
@@ -249,8 +251,8 @@ int main(int argc, char* argv[]) {
     ofstream outputUncollab;
     outputCollab.open(argv[COLLAB_FILE]);
     outputUncollab.open(argv[UNCOLLAB_FILE]);
-    outputCollab << endl;
-    outputUncollab << endl;
+    outputCollab << "Actor1,Actor2,Actor3,Actor4" << endl;
+    outputUncollab << "Actor1,Actor2,Actor3,Actor4" << endl;
     for (int actor = 0; actor < actors.size(); actor++) {
         vector<string> collabs = predictCollaborate(graph, actors[actor]);
         vector<string> uncollabs = predictNew(graph, actors[actor]);

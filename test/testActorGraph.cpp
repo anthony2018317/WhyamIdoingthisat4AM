@@ -20,7 +20,7 @@ class SimpleActorGraph : public ::testing::Test {
         // cout << "Finished loading file" << endl;
     }
 };
-TEST_F(SimpleActorGraph, TEST_GET_ACTOR) {
+/*TEST_F(SimpleActorGraph, TEST_GET_ACTOR) {
     Node* actor = graph.getActorNode("Robert Downey Jr.");
     ASSERT_EQ(actor->getName(), "Robert Downey Jr.");
     Node* actor2 = graph.getActorNode("Grant Jiang");
