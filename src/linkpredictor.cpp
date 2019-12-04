@@ -235,14 +235,14 @@ vector<string> parseFile(string actorFile) {
 
 /**
  * Runs link predictor to find the which actors most likely to be in next
- * movie Params:
+ * movie
+ * Params:
  *  - argc: the number of command line arguments (should be 4)
  *  - argv: contents of the command line arguments: should be name of file
  *          containing movie vasts, name of file containing actors algorithm
- * is to be run on, output file name of actors current actor collaborated
- *          with, and output file name of actors who current actor haven't
- *          collaborated with pairs
- * Returns: 0 if success, otherwise 1
+ *          is to be run on, output file name of actors current actor
+ *          collaborated with, and output file name of actors who current actor
+ *          haven't collaborated with pairs Returns: 0 if success, otherwise 1
  */
 int main(int argc, char* argv[]) {
     ActorGraph graph;
@@ -275,4 +275,5 @@ int main(int argc, char* argv[]) {
 
     outputCollab.close();
     outputUncollab.close();
+    return EXIT_SUCCESS;
 }

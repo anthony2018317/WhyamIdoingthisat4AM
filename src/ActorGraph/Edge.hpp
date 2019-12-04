@@ -11,6 +11,8 @@
 #include "Movie.hpp"
 // #include "Node.hpp"
 
+#define MAX_WEIGHT 0x7FFFFFFF  // Maximum weight
+
 using namespace std;
 class Node;
 
@@ -96,12 +98,17 @@ class Edge {
     bool isChecked();
 };
 
+/** Comparator of Edges. In priority queue, Edge with movie of an earlier date
+ *  have lower priority than those with a later date.
+ */
+
 class Node {
   private:
     vector<Edge*> edges;  // List of edges connected to this node
     Edge* prev;           // Path from some node to this node
     string name;          // Name of actor
-    bool done = false;    // True if checked
+    int pathWeight = MAX_WEIGHT;
+    bool done = false;  // True if checked
 
   public:
     /**
@@ -136,6 +143,10 @@ class Node {
 
     bool isDone();
 
+    int getPathWeight();
+
+    void setStart();
+
     /**
      * Sets the path from some other node to this node
      * Params:
@@ -143,6 +154,8 @@ class Node {
      * Returns: void
      */
     void setPrev(Edge* thePrev);
+
+    void setPrev(Edge* thePrev, int weight);
 
     /**
      * Returns the path from some actor to this actor
@@ -180,6 +193,23 @@ class Node {
      * Params: None
      */
     ~Node();
+};
+
+struct NodePairComp {
+    /**
+     * This operator compares two Edges, returning true if rhs has higher
+     * priority and false if lhs has higher priority
+     * Params:
+     *  - lhs: the left hand side Edge
+     *  - rhs: the right hand side Edge
+     * Returns true if RHS > LHS
+     */
+    bool operator()(pair<Node*, int>& lhs, pair<Node*, int>& rhs) const {
+        if (rhs.second != lhs.second) {
+            return lhs.second > rhs.second;
+        }
+        return lhs.first->getName() > rhs.first->getName();
+    }
 };
 
 #endif

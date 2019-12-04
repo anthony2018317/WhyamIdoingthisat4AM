@@ -7,10 +7,12 @@
  * connects two actors together when part of same movie.
  */
 
-
 #include "ActorGraph.hpp"
 
 using namespace std;
+
+// Movies made in year 2019 will have weight 1
+#define WEIGHT_YEAR 2019
 
 /**
  * Constructs a new Edge from one actor to another given a shared movie
@@ -24,7 +26,7 @@ Edge::Edge(Node* srcActor, Node* destActor, Movie movie_name) {
     src = srcActor;
     dest = destActor;
     name = movie_name;
-    weight = 1;
+    weight = 1 + (WEIGHT_YEAR - name.year);
     checked = false;
 }
 
@@ -42,6 +44,7 @@ void Edge::updateWeight(int newWeight) { weight = newWeight; }
  * Returns: weight of edge
  */
 int Edge::getWeight() { return weight; }
+
 
 /**
  * Returns the name of the movie the two actors starred in
@@ -64,11 +67,14 @@ void Edge::check() { checked = true; }
 bool Edge::isChecked() { return checked; }
 
 /**
- * Resets checked
+ * Resets checked and weight
  * Params: None
  * Returns: void
  */
-void Edge::unCheck() { checked = false; }
+void Edge::unCheck() {
+    checked = false;
+    weight = 1 + (WEIGHT_YEAR - name.year);
+}
 
 /**
  * Returns the node of the actor the edge is directed from

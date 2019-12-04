@@ -29,6 +29,7 @@ using namespace std;
 Node::Node(string actor_name) {
     name = actor_name;
     prev = nullptr;
+    pathWeight = MAX_WEIGHT;
 }
 
 /**
@@ -46,9 +47,12 @@ void Node::addEdge(Node* other, Movie movie) {
 
 void Node::check() { done = true; }
 
+int Node::getPathWeight() { return pathWeight; }
+
 void Node::uncheck() {
     done = false;
     prev = nullptr;
+    pathWeight = MAX_WEIGHT;
 }
 
 bool Node::isDone() { return done; }
@@ -74,6 +78,19 @@ void Node::setPrev(Edge* thePrev) {
         return;
     }
     prev = thePrev;
+}
+
+void Node::setPrev(Edge* thePrev, int weight) {
+    if (thePrev == nullptr) {
+        return;
+    }
+    prev = thePrev;
+    pathWeight = weight + thePrev->getWeight();  // Calculates total weight
+}
+
+void Node::setStart() {
+    prev = nullptr;
+    pathWeight = 0;
 }
 
 /**

@@ -20,6 +20,10 @@
 #define ACTOR_FILE 3
 #define OUTPUT_FILE 4
 
+// unweighted vs. weighted flags
+#define UNWEIGHTED 'u'
+#define WEIGHTED 'w'
+
 // Delimiters in outputing paths
 #define ACT_MOV "--"
 #define MOV_ACT "-->"
@@ -34,7 +38,76 @@ using namespace std;
 void clearEdges(vector<Edge*> edges);
 
 /**
- * Finds the closese unweighted path between actor1 and actor2
+ * Finds closest weighted path between actor1 and actor2
+ * Params:
+ *  - graph: graphs of all actors
+ *  - actor1: the actor the path starts from
+ *  - actor2: the actor the path ends at
+ *  Returns: a vector of edges that traces the path from actor1 to actor2
+ */
+vector<Edge*> findWeightedPath(ActorGraph& graph, string actor1,
+                               string actor2) {
+    Node* start = graph.getActorNode(actor1);
+    Node* end = graph.getActorNode(actor2);
+    if (!start || !end) {
+        // if start or end not found
+        return {};
+    }
+    priority_queue<pair<Node*, int>, vector<pair<Node*, int>>, NodePairComp>
+        djikstra;
+    unordered_map<Node*, int> changed;
+    start->setStart();
+    pair<Node*, int> startPair = {start, start->getPathWeight()};
+    djikstra.push(startPair);
+    changed[start] = 1;
+    while (!djikstra.empty()) {
+        pair<Node*, int> currentPair = djikstra.top();
+        Node* current = currentPair.first;
+        djikstra.pop();
+        if (current->isDone()) {
+            // current has already been checked
+            continue;
+        }
+        current->check();
+        vector<Edge*> neighbors = current->getEdges();
+        for (int edge = 0; edge < neighbors.size(); edge++) {
+            if (neighbors[edge]->getDest()->isDone()) {
+                // Node already checked, can't be shortest distance
+                continue;
+            }
+            if (neighbors[edge]->getDest()->getPathWeight() >
+                current->getPathWeight() + neighbors[edge]->getWeight()) {
+                // Found a shorter path to the node
+                Node* neighbor = neighbors[edge]->getDest();
+                neighbor->setPrev(neighbors[edge], current->getPathWeight());
+                changed[neighbor] = 1;  // Adds to changed list so Node can be
+                                        // reset when path found
+                if (neighbor == end) {
+                    // Reached the destination
+                    vector<Edge*> path;
+                    while (neighbor != start) {
+                        path.insert(path.begin(), neighbor->getPrev());
+                        neighbor = neighbor->getPrev()->getSource();
+                    }
+                    for (auto iter = changed.begin(); iter != changed.end();
+                         iter++) {
+                        // Resets all nodes
+                        iter->first->uncheck();
+                    }
+                    return path;
+                }
+                pair<Node*, int> neighborPair = {neighbor,
+                                                 neighbor->getPathWeight()};
+                djikstra.push(neighborPair);  // Adds Node to priority queue
+            }
+        }
+    }
+    // No path found
+    return {};
+}
+
+/**
+ * Finds the closest unweighted path between actor1 and actor2
  * Params:
  * - graph: the graph of all actors
  * - actor1: the name of first actor
@@ -46,6 +119,7 @@ vector<Edge*> findUnweightedPath(ActorGraph& graph, string actor1,
     Node* start = graph.getActorNode(actor1);
     Node* end = graph.getActorNode(actor2);
     if (!start || !end) {
+        // if start or end not found
         return {};
     }
     /*if (start->getName() == "Bruce Dern") {
@@ -272,7 +346,11 @@ vector<pair<string, string>> parsePathFile(string testFile) {
  */
 int main(int argc, char* argv[]) {
     ActorGraph graph;
-    graph.loadFromFile(argv[MOVIE_FILE], argv[UW]);
+    if (argv[UW][0] == UNWEIGHTED) {
+        graph.loadFromFile(argv[MOVIE_FILE], false);
+    } else if (argv[UW][0] == WEIGHTED) {
+        graph.loadFromFile(argv[MOVIE_FILE], true);
+    }
     vector<pair<string, string>> actors = parsePathFile(argv[ACTOR_FILE]);
     // cout << "made it past parsing" << endl;
     ofstream output;
@@ -284,8 +362,14 @@ int main(int argc, char* argv[]) {
         // cout << actors[test].first << " " << actors[test].second << endl;
         // cout << "actors " << actors[test].first << " " << actors[test].second
         //     << endl;
-        vector<Edge*> path =
-            findUnweightedPath(graph, actors[test].first, actors[test].second);
+        vector<Edge*> path;
+        if (argv[UW][0] == UNWEIGHTED) {
+            path = findUnweightedPath(graph, actors[test].first,
+                                      actors[test].second);
+        } else if (argv[UW][0] == WEIGHTED) {
+            path = findWeightedPath(graph, actors[test].first,
+                                    actors[test].second);
+        }
         if (path.size() == 0) {
             output << endl;
             continue;
