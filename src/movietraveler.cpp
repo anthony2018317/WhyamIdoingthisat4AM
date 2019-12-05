@@ -40,6 +40,12 @@ using namespace std;
 // Random actor to find first node to add all edges
 #define ACTOR "Kevin Bacon"
 
+/**
+ * This method finds all edges in a particular graph
+ * Params:
+ *  - graph: a refeence of the graph containing all actor nodes
+ * Returns: a priority queue ranking all edges in terms of edge weights
+ */
 priority_queue<Edge*, vector<Edge*>, EdgeComp> findEdges(ActorGraph& graph) {
     priority_queue<Edge*, vector<Edge*>, EdgeComp> edges;
 
@@ -48,43 +54,39 @@ priority_queue<Edge*, vector<Edge*>, EdgeComp> findEdges(ActorGraph& graph) {
     nodes.push(start);
     unordered_map<Node*, int> finished;
     finished[start] = 1;
-    // unordered_map<Node*, int> checked;
+
     while (!nodes.empty()) {
         Node* current = nodes.front();
-        // cout << current->getName() << endl;
+
         nodes.pop();
-        // checked[current] = 1;
+
         vector<Edge*> neighbors = current->getEdges();
         for (int edge = 0; edge < neighbors.size(); edge++) {
             // for each neighboring edge, add edges to edgeList
             edges.push(neighbors[edge]);
             if (finished.find(neighbors[edge]->getDest()) == finished.end()) {
                 // Node not in list
-                /*cout << "source: " << neighbors[edge]->getSource()->getName()
-                     << " ";
-                cout << "dest: " << neighbors[edge]->getDest()->getName()
-                     << " ";
-                cout << "movie: " << neighbors[edge]->getName().title << " "
-                     << endl;*/
                 nodes.push(neighbors[edge]->getDest());
                 finished[neighbors[edge]->getDest()] = 1;
             }
-
-            /*if (checked.find(neighbors[edge]->getDest()) != checked.end()) {
-                // Excludes all directed edges pointing back to a checked node
-                edges.push(neighbors[edge]);
-                nodes.push(neighbors[edge]->getDest());
-            }*/
         }
     }
     return edges;
 }
 
+/**
+ * This method finds the shortest path given a list of edges that comprise the
+ * graph
+ * Params:
+ *  - edges: the priority queue of edges, ranked by which higher priority is
+ *          lower weight
+ * Returns: A vector of edges representing the MST
+ */
 vector<Edge*> findShortestPath(
     priority_queue<Edge*, vector<Edge*>, EdgeComp>& edges) {
     unordered_map<Node*, unordered_set<Node*>> uptrees;
     vector<Edge*> thePath;
-    // cout << edges.size() << endl;
+
     while (!edges.empty()) {
         Edge* edge1 = edges.top();
 
@@ -98,22 +100,17 @@ vector<Edge*> findShortestPath(
                 // direction
                 edges.pop();
             } else {
-                // cout << "skipped" << endl;
                 edge2 = nullptr;
             }
         }
 
         Node* source = edge1->getSource();
         Node* dest = edge1->getDest();
-        /*cout << "source: " << source->getName() << " ";
-        cout << "dest: " << dest->getName() << " ";
-        cout << "movie: " << edge1->getName().title << " " << endl;*/
         if (source->getSentinel() != nullptr &&
             dest->getSentinel() != nullptr) {
             // Both Nodes are in uptrees
             if (source->getSentinel() == dest->getSentinel()) {
                 // In same uptree
-                // cout << "case 1" << endl;
                 continue;
             } else {
                 // In different uptrees
@@ -124,7 +121,6 @@ vector<Edge*> findShortestPath(
                     uptrees[source->getSentinel()];
                 if (uptreeSource.size() > uptreeDest.size()) {
                     // source's uptree is bigger
-                    // cout << "case 2" << endl;
                     thePath.push_back(edge1);
                     dest->setPrev(edge1);
                     uptrees.erase(dest->getSentinel());
@@ -142,23 +138,10 @@ vector<Edge*> findShortestPath(
 
                 } else {
                     // source's uptree is smaller
-                    // cout << "case 3" << endl;
-                    // cout << uptreeSource.size() << endl;
-                    // cout << uptreeDest.size() << endl;
-
-                    /*if (edge2 == nullptr) {
-                        // edge2 not the reverse of edge1
-                        edge2 = dest->findEdge(source->getName());
-                        if (dest == nullptr) {
-                            continue;
-                        }
-                    }*/
                     thePath.push_back(edge1);
                     dest->setPrev(edge1);
                     // Make dest's sentinel have a pointer to base of source's
                     // uptree
-                    // dest->getSentinel()->setBase(
-                    //    source->getSentinel()->getBase());
                     uptrees.erase(source->getSentinel());
                     for (auto iter = uptreeSource.begin();
                          iter != uptreeSource.end(); iter++) {
@@ -173,7 +156,6 @@ vector<Edge*> findShortestPath(
         }
         if (source->getSentinel() != nullptr) {
             // source is in an uptree but dest is not
-            // cout << "case 4" << endl;
             unordered_set<Node*> uptree = uptrees[source->getSentinel()];
             uptree.insert(dest);
             thePath.push_back(edge1);
@@ -200,12 +182,10 @@ vector<Edge*> findShortestPath(
         }
         if (dest->getSentinel() != nullptr) {
             // dest is in an uptree but source is not
-            // cout << "case 5" << endl;
 
             source->setSentinel(dest->getSentinel());
             dest->setPrev(edge1);
             thePath.push_back(edge1);
-            // dest->getSentinel()->setBase(source);
             unordered_set<Node*> uptree = uptrees[dest->getSentinel()];
             uptree.insert(source);
             if (dest != dest->getSentinel()->getBase()) {
@@ -227,17 +207,8 @@ vector<Edge*> findShortestPath(
             uptrees[dest->getSentinel()] = uptree;
             continue;
         }
-        // dest and source are not in uptrees
-        // cout << "case 6" << endl;
+
         dest->setPrev(edge1);
-        /*if (edge2 == nullptr) {
-            // edge2 not the reverse of edge1
-            edge2 = dest->findEdge(source->getName());
-            if (dest == nullptr) {
-                continue;
-            }
-        }
-        source->setPrev(edge2);*/
 
         source->setSentinel(source);
         dest->setSentinel(source);
@@ -250,16 +221,7 @@ vector<Edge*> findShortestPath(
     if (current == nullptr) {
         return {};
     }
-    // vector<Edge*> path;
-    // cout << "reached end" << endl;
-    /*while (current != nullptr) {
-        // Goes from base (beginning) to sentinel (end)
-        cout << "current: " << current->getName() << endl;
-        cout << "sentinel: " << current->getSentinel()->getName() << endl;
-        path.insert(path.begin(), current->getPrev());
-        current = current->getPrev()->getSource();
-    }
-    return path;*/
+
     return thePath;
 }
 
@@ -276,7 +238,7 @@ int main(int argc, char* argv[]) {
     ActorGraph graph;
     graph.loadFromFile(argv[MOVIEFILE], true);
     priority_queue<Edge*, vector<Edge*>, EdgeComp> edges = findEdges(graph);
-    // cout << "made it past findedges" << endl;
+
     vector<Edge*> shortest = findShortestPath(edges);
     ofstream os;
     os.open(argv[OUTFILE]);

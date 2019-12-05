@@ -24,6 +24,9 @@
 // Top rank 4 is printed
 #define TOP_RANK 4
 
+#define HEADER1 "Actor1,Actor2,Actor3,Actor4"
+#define HEADER2 "Actor1,Actor2,Actor3,Actor4"
+
 // Tabs between actors
 #define ACTOR_DELIM '\t'
 
@@ -69,11 +72,9 @@ vector<string> predictCollaborate(ActorGraph& graph, string actorName) {
             if (neighborMap.find(neighbors[edge]->getDest()) ==
                 neighborMap.end()) {
                 // edge between collaborator and neighbor not in list
-                // cout << "make it 1" << endl;
                 neighborMap[neighbors[edge]->getDest()] = 1;
 
             } else {
-                // cout << "why adding" << endl;
                 neighborMap[neighbors[edge]->getDest()]++;
             }
         }
@@ -101,6 +102,13 @@ vector<string> predictCollaborate(ActorGraph& graph, string actorName) {
     return top;
 }
 
+/**
+ * Compare function for two pair<string, int>, to rank priority values
+ * Params: left, the left hand side pair
+ *          right, the right hand side pair
+ * Returns true if left has bigger priority or if same if right has bigger
+ * alphabetical order
+ */
 bool compare(pair<string, int> left, pair<string, int> right) {
     if (left.second != right.second) {
         return left.second > right.second;
@@ -254,8 +262,8 @@ int main(int argc, char* argv[]) {
     ofstream outputUncollab;
     outputCollab.open(argv[COLLAB_FILE]);
     outputUncollab.open(argv[UNCOLLAB_FILE]);
-    outputCollab << "Actor1,Actor2,Actor3,Actor4" << endl;
-    outputUncollab << "Actor1,Actor2,Actor3,Actor4" << endl;
+    outputCollab << HEADER1 << endl;
+    outputUncollab << HEADER2 << endl;
     for (int actor = 0; actor < actors.size(); actor++) {
         vector<string> collabs = predictCollaborate(graph, actors[actor]);
         vector<string> uncollabs = predictNew(graph, actors[actor]);

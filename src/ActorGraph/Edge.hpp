@@ -139,22 +139,63 @@ class Node {
      */
     void addEdge(Edge* newEdge);
 
+    /**
+     * Marks a Node as done
+     * Params: None
+     * Returns: void
+     */
     void check();
 
+    /**
+     * Resets the Node
+     * Params: None
+     * Returns: void
+     */
     void uncheck();
 
+    /**
+     * Returns if the Node is checked
+     * Return: if the Node was checked
+     */
     bool isDone();
 
+    /**
+     * Returns the pathweight
+     * Return: the weight of the shortest path to the Node
+     */
     int getPathWeight();
 
+    /**
+     * Sets the Node to be start Node
+     * Params: None
+     * Returns: void
+     */
     void setStart();
 
+    /**
+     * Retuns the base of the uptree
+     * Returns: the base of the uptree
+     */
     Node* getBase();
 
+    /**
+     * Sets the base of the uptree to theBase
+     * Params:
+     * - theBase: the base of the uptree of the Node
+     */
     void setBase(Node* theBase);
 
+    /**
+     * Gets the sentinel Node
+     * Returns: The sentinel node of this Node
+     */
     Node* getSentinel();
 
+    /**
+     *  Sets the sentinel Node to sent
+     *  Params:
+     *  - sent: the sentinel node
+     */
     void setSentinel(Node* sent);
 
     /**
@@ -165,6 +206,12 @@ class Node {
      */
     void setPrev(Edge* thePrev);
 
+    /**
+     * Sets the previous of the Node
+     * Params:
+     * - thePrev: the Edge that is the previous of the Node
+     * - weight: the weight of the path leading up to the previous Node
+     */
     void setPrev(Edge* thePrev, int weight);
 
     /**

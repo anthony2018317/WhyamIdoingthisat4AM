@@ -19,12 +19,8 @@
 #include <vector>
 
 #include "Edge.hpp"
-// #include "Movie.hpp"
-// #include "Node.hpp"
 
 using namespace std;
-
-// Maybe include some data structures here
 
 /**
  * This class represents an actor in a graph created from a list of movies. It
@@ -35,7 +31,6 @@ using namespace std;
  */
 class ActorGraph {
   protected:
-    // Maybe add class data structure(s) here
     map<Movie, vector<Node*> >
         movieList;  // Hash map mapping movie names to list of actors
     map<string, Node*> actorList;  // Hash map mapping actors to their nodes
@@ -45,8 +40,6 @@ class ActorGraph {
      * Constuctor of the Actor graph
      */
     ActorGraph();
-
-    // Maybe add some more methods here
 
     /** You can modify this method definition as you wish
      *

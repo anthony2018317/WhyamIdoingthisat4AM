@@ -47,10 +47,24 @@ void Node::addEdge(Node* other, Movie movie) {
     edges.push_back(edge);
 }
 
+/**
+ * Marks a Node as done
+ * Params: None
+ * Returns: void
+ */
 void Node::check() { done = true; }
 
+/**
+ * Returns the pathweight
+ * Return: the weight of the shortest path to the Node
+ */
 int Node::getPathWeight() { return pathWeight; }
 
+/**
+ * Resets the Node
+ * Params: None
+ * Returns: void
+ */
 void Node::uncheck() {
     done = false;
     prev = nullptr;
@@ -59,6 +73,10 @@ void Node::uncheck() {
     pathWeight = MAX_WEIGHT;
 }
 
+/**
+ * Returns if the Node is checked
+ * Return: if the Node was checked
+ */
 bool Node::isDone() { return done; }
 
 /**
@@ -70,8 +88,17 @@ bool Node::isDone() { return done; }
  */
 void Node::addEdge(Edge* newEdge) { edges.push_back(newEdge); }
 
+/**
+ *  Sets the sentinel Node to sent
+ *  Params:
+ *  - sent: the sentinel node
+ */
 void Node::setSentinel(Node* sent) { sentinel = sent; }
 
+/**
+ * Gets the sentinel Node
+ * Returns: The sentinel node of this Node
+ */
 Node* Node::getSentinel() { return sentinel; }
 
 /**
@@ -88,6 +115,12 @@ void Node::setPrev(Edge* thePrev) {
     prev = thePrev;
 }
 
+/**
+ * Sets the previous of the Node
+ * Params:
+ * - thePrev: the Edge that is the previous of the Node
+ * - weight: the weight of the path leading up to the previous Node
+ */
 void Node::setPrev(Edge* thePrev, int weight) {
     if (thePrev == nullptr) {
         return;
@@ -96,13 +129,27 @@ void Node::setPrev(Edge* thePrev, int weight) {
     pathWeight = weight + thePrev->getWeight();  // Calculates total weight
 }
 
+/**
+ * Sets the Node to be start Node
+ * Params: None
+ * Returns: void
+ */
 void Node::setStart() {
     prev = nullptr;
     pathWeight = 0;
 }
 
+/**
+ * Sets the base of the uptree to theBase
+ * Params:
+ * - theBase: the base of the uptree of the Node
+ */
 void Node::setBase(Node* theBase) { base = theBase; }
 
+/**
+ * Retuns the base of the uptree
+ * Returns: the base of the uptree
+ */
 Node* Node::getBase() { return base; }
 
 /**
