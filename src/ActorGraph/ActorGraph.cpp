@@ -15,7 +15,7 @@
 
 #include "ActorGraph.hpp"
 
-using namespace std;
+// using namespace std;
 
 /**
  * Constructor of the Actor graph
@@ -36,6 +36,7 @@ bool ActorGraph::loadFromFile(const char* in_filename,
                               bool use_weighted_edges) {
     // Initialize the file stream
     ifstream infile(in_filename);
+    cout << "filename: " << in_filename << endl;
 
     bool have_header = false;
 
@@ -55,7 +56,6 @@ bool ActorGraph::loadFromFile(const char* in_filename,
 
         istringstream ss(s);
         vector<string> record;
-
         while (ss) {
             string str;
 
@@ -76,8 +76,6 @@ bool ActorGraph::loadFromFile(const char* in_filename,
         int year = stoi(record[2]);
         string title = movie_title + " " + record[2];
         Movie movie = {title, movie_title, year};
-
-        // cout << "year: " << year << endl;
 
         // Builds graph up
         /*if (movie.name == "The Island" && (year == 2010 || year == 2005)) {
@@ -173,4 +171,15 @@ vector<Node*> ActorGraph::getMovieCast(Movie movie) {
         return {};
     }
     return movieList.find(movie)->second;
+}
+
+/**
+ * Deletes all nodes in ActorGraph
+ * Params: None
+ * Returns: void
+ */
+void ActorGraph::clear() {
+    for (auto iter = actorList.begin(); iter != actorList.end(); iter++) {
+        delete iter->second;
+    }
 }

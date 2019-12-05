@@ -7,9 +7,11 @@
  * connects two actors together when part of same movie.
  */
 
+#include "Edge.hpp"
 #include "ActorGraph.hpp"
+//#include <iostream>
 
-using namespace std;
+// using namespace std;
 
 // Movies made in year 2019 will have weight 1
 #define WEIGHT_YEAR 2019
@@ -44,7 +46,6 @@ void Edge::updateWeight(int newWeight) { weight = newWeight; }
  * Returns: weight of edge
  */
 int Edge::getWeight() { return weight; }
-
 
 /**
  * Returns the name of the movie the two actors starred in

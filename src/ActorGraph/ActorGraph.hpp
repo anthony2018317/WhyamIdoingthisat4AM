@@ -8,8 +8,8 @@
  * any/all aspects as you wish.
  */
 
-// #ifndef ACTORGRAPH_HPP
-// #define ACTORGRAPH_HPP
+#ifndef ACTORGRAPH_HPP
+#define ACTORGRAPH_HPP
 
 #include <fstream>
 #include <iostream>
@@ -38,8 +38,7 @@ class ActorGraph {
     // Maybe add class data structure(s) here
     map<Movie, vector<Node*> >
         movieList;  // Hash map mapping movie names to list of actors
-    map<string, Node*>
-        actorList;  // Hash map mapping actors to their nodes
+    map<string, Node*> actorList;  // Hash map mapping actors to their nodes
 
   public:
     /**
@@ -77,8 +76,13 @@ class ActorGraph {
      * if movie does not exist
      */
     vector<Node*> getMovieCast(Movie movieName);
+
+    /**
+     * Deletes all nodes in ActorGraph
+     * Params: None
+     * Returns: void
+     */
+    void clear();
 };
 
-
-
-// #endif  // ACTORGRAPH_HPP
+#endif  // ACTORGRAPH_HPP

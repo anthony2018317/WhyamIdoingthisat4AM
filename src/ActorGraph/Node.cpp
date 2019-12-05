@@ -19,7 +19,7 @@
 // #include "Movie.hpp"
 // #include "Node.hpp"
 
-using namespace std;
+// using namespace std;
 
 /**
  * Constructs a new Node with the name of the actor
@@ -30,6 +30,8 @@ Node::Node(string actor_name) {
     name = actor_name;
     prev = nullptr;
     pathWeight = MAX_WEIGHT;
+    sentinel = nullptr;
+    base = nullptr;
 }
 
 /**
@@ -52,6 +54,8 @@ int Node::getPathWeight() { return pathWeight; }
 void Node::uncheck() {
     done = false;
     prev = nullptr;
+    base = nullptr;
+    sentinel = nullptr;
     pathWeight = MAX_WEIGHT;
 }
 
@@ -65,6 +69,10 @@ bool Node::isDone() { return done; }
  * Returns: void
  */
 void Node::addEdge(Edge* newEdge) { edges.push_back(newEdge); }
+
+void Node::setSentinel(Node* sent) { sentinel = sent; }
+
+Node* Node::getSentinel() { return sentinel; }
 
 /**
  * Sets the path from some other node to this node
@@ -92,6 +100,10 @@ void Node::setStart() {
     prev = nullptr;
     pathWeight = 0;
 }
+
+void Node::setBase(Node* theBase) { base = theBase; }
+
+Node* Node::getBase() { return base; }
 
 /**
  * Returns the path from some actor to this actor

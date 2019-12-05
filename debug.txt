@@ -1,1 +1,5 @@
-begin
+filename: data/imdb_small_sample.tsv
+Kevin Bacon
+made it past findedges
+source: Kevin Bacon dest: James McAvoy
+source: Kevin Bacon dest: Michael Fassbender

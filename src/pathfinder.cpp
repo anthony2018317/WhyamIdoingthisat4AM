@@ -389,5 +389,6 @@ int main(int argc, char* argv[]) {
         }
         output << endl;  // prints new line
     }
+    graph.clear();
     output.close();
 }

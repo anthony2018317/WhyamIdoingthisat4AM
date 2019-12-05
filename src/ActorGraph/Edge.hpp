@@ -109,6 +109,8 @@ class Node {
     string name;          // Name of actor
     int pathWeight = MAX_WEIGHT;
     bool done = false;  // True if checked
+    Node* sentinel;     // Sentinel node of Node's subtree
+    Node* base;  // For sentinel node only: pointer to base node of uptree
 
   public:
     /**
@@ -146,6 +148,14 @@ class Node {
     int getPathWeight();
 
     void setStart();
+
+    Node* getBase();
+
+    void setBase(Node* theBase);
+
+    Node* getSentinel();
+
+    void setSentinel(Node* sent);
 
     /**
      * Sets the path from some other node to this node
@@ -195,10 +205,15 @@ class Node {
     ~Node();
 };
 
+/**
+ * This struct compares two Node*-weight pairs to be used for priority queue
+ * ordering
+ */
 struct NodePairComp {
     /**
-     * This operator compares two Edges, returning true if rhs has higher
-     * priority and false if lhs has higher priority
+     * This operator compares two Node-weight pairs, returning true if rhs has
+     * higher priority (lower weight) and false if lhs has higher priority
+     * (lower weight)
      * Params:
      *  - lhs: the left hand side Edge
      *  - rhs: the right hand side Edge
@@ -209,6 +224,27 @@ struct NodePairComp {
             return lhs.second > rhs.second;
         }
         return lhs.first->getName() > rhs.first->getName();
+    }
+};
+
+/**
+ * This struct compares two Edges to be used for priority queue ordering
+ */
+struct EdgeComp {
+    /**
+     * This operator compares two Edges, returning true if rhs has higher
+     * priority (lower weight) and false if lhs has higher priority (lower
+     * weight)
+     * Params:
+     *  - lhs: the left hand side Edge
+     *  - rhs: the right hand side Edge
+     * Returns true if RHS > LHS
+     */
+    bool operator()(Edge* lhs, Edge* rhs) const {
+        if (rhs->getWeight() != rhs->getWeight()) {
+            return lhs->getWeight() > rhs->getWeight();
+        }
+        return lhs->getWeight() > rhs->getWeight();
     }
 };
 

@@ -272,7 +272,7 @@ int main(int argc, char* argv[]) {
         }
         outputUncollab << endl;
     }
-
+    graph.clear();
     outputCollab.close();
     outputUncollab.close();
     return EXIT_SUCCESS;
